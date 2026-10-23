@@ -1,0 +1,65 @@
+# Sistema de Atendimento Hospitalar — Squad [NOME DO SQUAD]
+
+Triagem digital do Hospital Campo Real, feita em C++ com estruturas de dados lineares
+construídas manualmente (**sem STL**).
+
+PSC II · Engenharia de Software · Campo Real · Prof. Giovane Galvão
+
+
+## Estruturas utilizadas
+
+| Requisito | Estrutura | Uso no sistema |
+|-----------|-----------|----------------|
+| R1 | Fila (FIFO, ponteiros `frente` e `tras`) | Pacientes aguardando atendimento |
+| R2 | Pilha (LIFO) | Histórico de atendimentos concluídos |
+| R3 | Lista encadeada | Médicos de plantão; ao atender, o médico volta ao final da lista |
+| R4 | Pilha auxiliar | Relatório que imprime o histórico sem destruí-lo |
+
+Todas usam a struct `No` fornecida. Todo `new` tem o `delete` correspondente
+(`dequeue`, `pop`, `chamarMedico` e os destrutores). Verificado com AddressSanitizer, sem vazamentos.
+
+## Como compilar e executar
+
+```bash
+g++ -std=c++17 -Wall -o atendimento atendimento_template.cpp
+./atendimento
+```
+
+## Exemplo de saída
+
+```
+Médicos disponíveis: Dra. Ana Lima -> Dr. Bruno Costa -> Dra. Carla Ramos
+
+Pacientes chegando:
+Próximo a ser atendido: Eduardo (urgencia=3)
+Total na fila: 4
+
+Simulação de atendimentos:
+  [1] Dra. Ana Lima atende Eduardo (urgencia=3)
+  [2] Dr. Bruno Costa atende Fernanda (urgencia=1)
+  [3] Dra. Carla Ramos atende Gabriel (urgencia=2)
+  [4] Dra. Ana Lima atende Helena (urgencia=1)
+
+Último atendimento registrado (peek): Dra. Ana Lima → Helena (urgencia=1)
+
+=== Relatório de Atendimentos ===
+  1. Dra. Ana Lima → Helena (urgencia=1)
+  2. Dra. Carla Ramos → Gabriel (urgencia=2)
+  3. Dr. Bruno Costa → Fernanda (urgencia=1)
+  4. Dra. Ana Lima → Eduardo (urgencia=3)
+```
+
+## Decisões de projeto
+
+- `enqueue` insere sempre no final (FIFO puro), como pedido no TODO 1.
+- `imprimirHistorico` desempilha para uma pilha auxiliar e depois devolve tudo, preservando a ordem original.
+- O template foi mantido intacto: só os corpos dos TODOs foram preenchidos e a linha `medicos.adicionarMedico(medico);` foi descomentada.
+- Operações em estruturas vazias retornam string vazia, sem travar o programa.
+
+## Histórico de commits
+
+1. `feat(R1): fila de pacientes com enqueue, dequeue, peek e tamanho`
+2. `feat(R2): pilha de histórico com push, pop e peek`
+3. `feat(R3): lista de médicos; médico volta ao final após atender`
+4. `feat(R4): imprimirHistorico com pilha auxiliar`
+5. `docs: README com instruções e exemplo de saída`
